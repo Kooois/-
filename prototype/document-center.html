@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能公文处理中心</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-file-alt text-blue-500 text-2xl mr-3"></i>
+                <h1 class="text-xl font-bold text-gray-800">智能公文处理中心</h1>
+            </div>
+            <div class="flex items-center">
+                <button class="mr-4 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="mr-4 text-gray-500 hover:text-gray-700 relative">
+                    <i class="fas fa-bell"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                </button>
+                <div class="flex items-center">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                    <span class="text-gray-700">李经理</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="flex-grow container mx-auto px-4 py-6">
+        <!-- 到期提醒区域 -->
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded shadow-sm">
+            <div class="flex items-start">
+                <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                <div>
+                    <h3 class="font-bold text-red-700">公文到期提醒</h3>
+                    <p class="text-red-600">您有 <span class="font-bold">3</span> 份文件将于明天到期，请及时处理！</p>
+                    <div class="mt-2">
+                        <button class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">查看详情</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 功能卡片区域 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <div class="flex items-center text-blue-500 mb-3">
+                    <i class="fas fa-file-upload text-xl mr-3"></i>
+                    <h3 class="font-bold">上传公文</h3>
+                </div>
+                <p class="text-gray-600 text-sm">上传公文，系统自动识别并分类</p>
+            </div>
+            <div class="bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <div class="flex items-center text-green-500 mb-3">
+                    <i class="fas fa-file-signature text-xl mr-3"></i>
+                    <h3 class="font-bold">公文审阅</h3>
+                </div>
+                <p class="text-gray-600 text-sm">审阅公文并添加批注、签批意见</p>
+            </div>
+            <div class="bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <div class="flex items-center text-purple-500 mb-3">
+                    <i class="fas fa-chart-line text-xl mr-3"></i>
+                    <h3 class="font-bold">公文统计</h3>
+                </div>
+                <p class="text-gray-600 text-sm">查看公文处理数据和统计报告</p>
+            </div>
+        </div>
+
+        <!-- 公文列表 -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-gray-800">最近公文</h2>
+                <div class="flex">
+                    <div class="relative mr-4">
+                        <input type="text" placeholder="搜索公文..." class="border rounded-lg py-2 px-3 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute right-3 top-2.5 text-gray-400"></i>
+                    </div>
+                    <div class="flex">
+                        <button class="mr-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm">
+                            <i class="fas fa-filter mr-1"></i>筛选
+                        </button>
+                        <button class="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm">
+                            <i class="fas fa-plus mr-1"></i>新建
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 公文标签页 -->
+            <div class="border-b mb-4">
+                <ul class="flex -mb-px">
+                    <li class="mr-1">
+                        <a href="#" class="inline-block py-2 px-4 text-blue-500 font-medium border-b-2 border-blue-500">全部公文</a>
+                    </li>
+                    <li class="mr-1">
+                        <a href="#" class="inline-block py-2 px-4 text-gray-500 hover:text-gray-700">红头文件</a>
+                    </li>
+                    <li class="mr-1">
+                        <a href="#" class="inline-block py-2 px-4 text-gray-500 hover:text-gray-700">通知</a>
+                    </li>
+                    <li class="mr-1">
+                        <a href="#" class="inline-block py-2 px-4 text-gray-500 hover:text-gray-700">函件</a>
+                    </li>
+                    <li>
+                        <a href="#" class="inline-block py-2 px-4 text-gray-500 hover:text-gray-700">其他</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 公文列表表格 -->
+            <table class="w-full">
+                <thead>
+                    <tr class="text-left text-gray-500 border-b">
+                        <th class="pb-3 font-medium">文号</th>
+                        <th class="pb-3 font-medium">标题</th>
+                        <th class="pb-3 font-medium">类型</th>
+                        <th class="pb-3 font-medium">签发人</th>
+                        <th class="pb-3 font-medium">日期</th>
+                        <th class="pb-3 font-medium">状态</th>
+                        <th class="pb-3 font-medium">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="py-3 text-sm">财字[2023]42号</td>
+                        <td class="py-3 text-sm font-medium">关于2023年度预算执行情况的通报</td>
+                        <td class="py-3 text-sm"><span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">红头文件</span></td>
+                        <td class="py-3 text-sm">王局长</td>
+                        <td class="py-3 text-sm">2023-10-15</td>
+                        <td class="py-3 text-sm"><span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">待处理</span></td>
+                        <td class="py-3 text-sm">
+                            <div class="flex space-x-2">
+                                <button class="text-blue-500 hover:text-blue-700"><i class="fas fa-eye"></i></button>
+                                <button class="text-green-500 hover:text-green-700"><i class="fas fa-edit"></i></button>
+                                <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="py-3 text-sm">人事[2023]18号</td>
+                        <td class="py-3 text-sm font-medium">关于开展年度绩效考核工作的通知</td>
+                        <td class="py-3 text-sm"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">通知</span></td>
+                        <td class="py-3 text-sm">张主任</td>
+                        <td class="py-3 text-sm">2023-10-10</td>
+                        <td class="py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">已处理</span></td>
+                        <td class="py-3 text-sm">
+                            <div class="flex space-x-2">
+                                <button class="text-blue-500 hover:text-blue-700"><i class="fas fa-eye"></i></button>
+                                <button class="text-green-500 hover:text-green-700"><i class="fas fa-edit"></i></button>
+                                <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="py-3 text-sm">办公室[2023]31号</td>
+                        <td class="py-3 text-sm font-medium">关于召开第四季度工作会议的函</td>
+                        <td class="py-3 text-sm"><span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">函件</span></td>
+                        <td class="py-3 text-sm">李主任</td>
+                        <td class="py-3 text-sm">2023-10-05</td>
+                        <td class="py-3 text-sm"><span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">即将到期</span></td>
+                        <td class="py-3 text-sm">
+                            <div class="flex space-x-2">
+                                <button class="text-blue-500 hover:text-blue-700"><i class="fas fa-eye"></i></button>
+                                <button class="text-green-500 hover:text-green-700"><i class="fas fa-edit"></i></button>
+                                <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 分页 -->
+            <div class="flex justify-between items-center mt-4">
+                <div class="text-sm text-gray-500">
+                    显示 1 - 3 共 42 条记录
+                </div>
+                <div class="flex">
+                    <button class="px-3 py-1 border rounded-l-lg bg-gray-100 text-gray-600 hover:bg-gray-200">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="px-3 py-1 border-t border-b bg-blue-500 text-white">1</button>
+                    <button class="px-3 py-1 border-t border-b text-gray-600 hover:bg-gray-100">2</button>
+                    <button class="px-3 py-1 border-t border-b text-gray-600 hover:bg-gray-100">3</button>
+                    <button class="px-3 py-1 border rounded-r-lg bg-gray-100 text-gray-600 hover:bg-gray-200">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部状态栏 -->
+    <footer class="bg-white border-t py-3">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-500">
+            智能公文处理中心 © 2023 | 已接入讯飞OCR与自然语言处理技术
+        </div>
+    </footer>
+
+    <!-- 语音提示弹窗 -->
+    <div class="fixed bottom-10 right-10 bg-white shadow-lg rounded-lg p-4 flex items-center animate-bounce">
+        <i class="fas fa-volume-up text-blue-500 text-2xl mr-3"></i>
+        <div>
+            <p class="font-medium">语音提醒</p>
+            <p class="text-sm text-gray-600">您有3份文件将于明天到期</p>
+        </div>
+        <button class="ml-4 text-gray-400 hover:text-gray-600">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</body>
+</html> 

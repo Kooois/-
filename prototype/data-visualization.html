@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行政数据可视化报告</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8fafc;
+        }
+        .chart-container {
+            position: relative;
+            height: 250px;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-chart-pie text-yellow-500 text-2xl mr-3"></i>
+                <h1 class="text-xl font-bold text-gray-800">行政数据可视化报告</h1>
+            </div>
+            <div class="flex items-center">
+                <div class="relative mr-4">
+                    <select class="appearance-none bg-gray-100 border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        <option>近30天</option>
+                        <option>近90天</option>
+                        <option>近半年</option>
+                        <option>近一年</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+                <button class="mr-4 bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm flex items-center">
+                    <i class="fas fa-file-export mr-1"></i>导出报告
+                </button>
+                <div class="flex items-center">
+                    <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                    <span class="text-gray-700">杨主管</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="flex-grow container mx-auto px-4 py-6 overflow-auto">
+        <!-- 语音查询区域 -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex items-center">
+                <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
+                    <i class="fas fa-microphone text-yellow-500"></i>
+                </div>
+                <div class="flex-grow relative">
+                    <input type="text" placeholder="使用语音或文字查询数据，例如：'上个月各部门办公用品支出情况'" class="w-full border rounded-full py-3 px-4 pr-12 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mt-3 flex flex-wrap">
+                <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full mr-2 mb-2 cursor-pointer hover:bg-gray-200">
+                    上个月各部门办公用品支出情况
+                </span>
+                <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full mr-2 mb-2 cursor-pointer hover:bg-gray-200">
+                    本季度会议室使用频率统计
+                </span>
+                <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full mr-2 mb-2 cursor-pointer hover:bg-gray-200">
+                    近半年各类报销金额趋势
+                </span>
+                <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full mr-2 mb-2 cursor-pointer hover:bg-gray-200">
+                    今年公文处理效率分析
+                </span>
+            </div>
+        </div>
+
+        <!-- 概览卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm text-gray-500">本月公文处理量</p>
+                        <p class="text-2xl font-bold text-gray-800 mt-1">128</p>
+                        <p class="text-xs text-green-500 mt-1"><i class="fas fa-arrow-up mr-1"></i> 12% 环比增长</p>
+                    </div>
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-file-alt text-blue-500"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm text-gray-500">本月会议次数</p>
+                        <p class="text-2xl font-bold text-gray-800 mt-1">42</p>
+                        <p class="text-xs text-green-500 mt-1"><i class="fas fa-arrow-up mr-1"></i> 8% 环比增长</p>
+                    </div>
+                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-video text-purple-500"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm text-gray-500">本月报销金额</p>
+                        <p class="text-2xl font-bold text-gray-800 mt-1">¥108,542</p>
+                        <p class="text-xs text-red-500 mt-1"><i class="fas fa-arrow-down mr-1"></i> 5% 环比下降</p>
+                    </div>
+                    <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-receipt text-red-500"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm text-gray-500">本月办公用品支出</p>
+                        <p class="text-2xl font-bold text-gray-800 mt-1">¥15,280</p>
+                        <p class="text-xs text-green-500 mt-1"><i class="fas fa-arrow-up mr-1"></i> 3% 环比增长</p>
+                    </div>
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-pencil-alt text-green-500"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图表区域 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- 办公用品支出图表 -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-bold text-gray-800">各部门办公用品支出情况</h2>
+                    <button class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="departmentExpenseChart"></canvas>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center text-sm text-gray-500">
+                        <div>总支出: <span class="font-bold text-gray-700">¥15,280</span></div>
+                        <div>最高支出部门: <span class="font-bold text-gray-700">技术部</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 会议室使用情况图表 -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-bold text-gray-800">会议室使用频率统计</h2>
+                    <button class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="meetingRoomChart"></canvas>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center text-sm text-gray-500">
+                        <div>总会议次数: <span class="font-bold text-gray-700">42</span></div>
+                        <div>使用率最高: <span class="font-bold text-gray-700">A会议室</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 报销趋势图表 -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-bold text-gray-800">近六个月报销金额趋势</h2>
+                    <button class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="expenseTrendChart"></canvas>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center text-sm text-gray-500">
+                        <div>半年总额: <span class="font-bold text-gray-700">¥675,420</span></div>
+                        <div>环比变化: <span class="font-bold text-red-500">-5%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 公文处理效率图表 -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-bold text-gray-800">公文处理效率分析</h2>
+                    <button class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="documentEfficiencyChart"></canvas>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center text-sm text-gray-500">
+                        <div>平均处理时间: <span class="font-bold text-gray-700">2.8天</span></div>
+                        <div>效率提升: <span class="font-bold text-green-500">+15%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据明细表格 -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="font-bold text-gray-800">办公用品支出明细</h2>
+                <div class="flex">
+                    <button class="mr-2 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm">
+                        <i class="fas fa-filter mr-1"></i>筛选
+                    </button>
+                    <button class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm">
+                        <i class="fas fa-download mr-1"></i>导出
+                    </button>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-gray-500 border-b">
+                            <th class="pb-3 font-medium">部门</th>
+                            <th class="pb-3 font-medium">品类</th>
+                            <th class="pb-3 font-medium">申请人</th>
+                            <th class="pb-3 font-medium">申请日期</th>
+                            <th class="pb-3 font-medium">数量</th>
+                            <th class="pb-3 font-medium">金额</th>
+                            <th class="pb-3 font-medium">状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3 text-sm">技术部</td>
+                            <td class="py-3 text-sm">打印耗材</td>
+                            <td class="py-3 text-sm">王工程师</td>
+                            <td class="py-3 text-sm">2023-10-12</td>
+                            <td class="py-3 text-sm">10</td>
+                            <td class="py-3 text-sm font-medium">¥2,500</td>
+                            <td class="py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">已完成</span></td>
+                        </tr>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3 text-sm">市场部</td>
+                            <td class="py-3 text-sm">文具用品</td>
+                            <td class="py-3 text-sm">张经理</td>
+                            <td class="py-3 text-sm">2023-10-15</td>
+                            <td class="py-3 text-sm">25</td>
+                            <td class="py-3 text-sm font-medium">¥650</td>
+                            <td class="py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">已完成</span></td>
+                        </tr>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3 text-sm">行政部</td>
+                            <td class="py-3 text-sm">办公设备</td>
+                            <td class="py-3 text-sm">李主管</td>
+                            <td class="py-3 text-sm">2023-10-18</td>
+                            <td class="py-3 text-sm">2</td>
+                            <td class="py-3 text-sm font-medium">¥5,800</td>
+                            <td class="py-3 text-sm"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">已完成</span></td>
+                        </tr>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3 text-sm">人事部</td>
+                            <td class="py-3 text-sm">纸张</td>
+                            <td class="py-3 text-sm">赵助理</td>
+                            <td class="py-3 text-sm">2023-10-20</td>
+                            <td class="py-3 text-sm">50</td>
+                            <td class="py-3 text-sm font-medium">¥1,200</td>
+                            <td class="py-3 text-sm"><span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">处理中</span></td>
+                        </tr>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3 text-sm">财务部</td>
+                            <td class="py-3 text-sm">电子设备</td>
+                            <td class="py-3 text-sm">钱经理</td>
+                            <td class="py-3 text-sm">2023-10-25</td>
+                            <td class="py-3 text-sm">3</td>
+                            <td class="py-3 text-sm font-medium">¥5,130</td>
+                            <td class="py-3 text-sm"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">审批中</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 分页 -->
+            <div class="flex justify-between items-center mt-4">
+                <div class="text-sm text-gray-500">
+                    显示 1 - 5 共 42 条记录
+                </div>
+                <div class="flex">
+                    <button class="px-3 py-1 border rounded-l-lg bg-gray-100 text-gray-600 hover:bg-gray-200">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="px-3 py-1 border-t border-b bg-yellow-500 text-white">1</button>
+                    <button class="px-3 py-1 border-t border-b text-gray-600 hover:bg-gray-100">2</button>
+                    <button class="px-3 py-1 border-t border-b text-gray-600 hover:bg-gray-100">3</button>
+                    <button class="px-3 py-1 border rounded-r-lg bg-gray-100 text-gray-600 hover:bg-gray-200">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部状态栏 -->
+    <footer class="bg-white border-t py-3">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-500">
+            行政数据可视化报告 © 2023 | 已接入讯飞语音识别与数据分析技术
+        </div>
+    </footer>
+
+    <!-- 语音结果弹窗 -->
+    <div class="fixed bottom-10 right-10 bg-white shadow-lg rounded-lg p-4 max-w-md w-full">
+        <div class="flex justify-between items-center mb-3">
+            <div class="flex items-center">
+                <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mr-2">
+                    <i class="fas fa-lightbulb text-yellow-500"></i>
+                </div>
+                <h3 class="font-bold">智能数据洞察</h3>
+            </div>
+            <button class="text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <p class="text-sm text-gray-700 mb-3">
+            根据您查询的"上个月各部门办公用品支出情况"，我发现以下数据洞察：
+        </p>
+        <ul class="text-sm text-gray-600 mb-3 space-y-1">
+            <li>• 技术部支出最高，占总支出的38%，主要用于打印耗材</li>
+            <li>• 行政部支出环比上月增长15%，主要因为更新办公设备</li>
+            <li>• 市场部和人事部支出较为稳定，基本与上月持平</li>
+        </ul>
+        <div class="flex justify-end">
+            <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                <i class="fas fa-file-alt mr-1"></i>生成详细报告
+            </button>
+        </div>
+    </div>
+
+    <!-- 图表初始化脚本 -->
+    <script>
+        // 部门支出饼图
+        const departmentExpenseChart = new Chart(
+            document.getElementById('departmentExpenseChart'),
+            {
+                type: 'doughnut',
+                data: {
+                    labels: ['技术部', '市场部', '行政部', '人事部', '财务部'],
+                    datasets: [{
+                        data: [5800, 3200, 2500, 2100, 1680],
+                        backgroundColor: [
+                            '#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#8b5cf6'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            }
+        );
+
+        // 会议室使用频率柱状图
+        const meetingRoomChart = new Chart(
+            document.getElementById('meetingRoomChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['A会议室', 'B会议室', 'C会议室', 'D会议室'],
+                    datasets: [{
+                        label: '使用次数',
+                        data: [18, 12, 8, 4],
+                        backgroundColor: '#a78bfa',
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 报销趋势线图
+        const expenseTrendChart = new Chart(
+            document.getElementById('expenseTrendChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['6月', '7月', '8月', '9月', '10月', '11月'],
+                    datasets: [{
+                        label: '报销金额',
+                        data: [92000, 115000, 105000, 132000, 114000, 108000],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            }
+        );
+
+        // 公文处理效率图
+        const documentEfficiencyChart = new Chart(
+            document.getElementById('documentEfficiencyChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['6月', '7月', '8月', '9月', '10月', '11月'],
+                    datasets: [{
+                        label: '平均处理时间（天）',
+                        data: [5.2, 4.8, 4.2, 3.7, 3.1, 2.8],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            reverse: true
+                        }
+                    }
+                }
+            }
+        );
+    </script>
+</body>
+</html> 

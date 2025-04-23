@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全流程智能审批助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8fafc;
+        }
+        .approval-step.completed .step-number {
+            background-color: #10b981;
+            color: white;
+        }
+        .approval-step.current .step-number {
+            background-color: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+        .approval-step.pending .step-number {
+            background-color: white;
+            color: #9ca3af;
+            border-color: #d1d5db;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-clipboard-check text-red-500 text-2xl mr-3"></i>
+                <h1 class="text-xl font-bold text-gray-800">全流程智能审批助手</h1>
+            </div>
+            <div class="flex items-center">
+                <button class="mr-4 bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm flex items-center">
+                    <i class="fas fa-plus mr-1"></i>发起审批
+                </button>
+                <button class="mr-4 text-gray-500 hover:text-gray-700 relative">
+                    <i class="fas fa-bell"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">5</span>
+                </button>
+                <div class="flex items-center">
+                    <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="用户头像" class="w-8 h-8 rounded-full mr-2">
+                    <span class="text-gray-700">王总监</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="flex-grow container mx-auto px-4 py-6">
+        <!-- 催办提醒 -->
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded shadow-sm">
+            <div class="flex items-start">
+                <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                <div>
+                    <h3 class="font-bold text-red-700">待审批提醒</h3>
+                    <p class="text-red-600">您有 <span class="font-bold">5</span> 份待审批申请，其中 <span class="font-bold">2</span> 份为紧急文件！</p>
+                    <div class="mt-2">
+                        <button class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">立即处理</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 功能卡片区域 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <div class="flex items-center text-red-500 mb-3">
+                    <i class="fas fa-file-signature text-xl mr-3"></i>
+                    <h3 class="font-bold">我发起的</h3>
+                </div>
+                <p class="text-gray-600 text-sm">跟踪您发起的所有审批申请</p>
+                <div class="mt-2 text-right">
+                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">8个流程</span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <div class="flex items-center text-blue-500 mb-3">
+                    <i class="fas fa-tasks text-xl mr-3"></i>
+                    <h3 class="font-bold">待我审批</h3>
+                </div>
+                <p class="text-gray-600 text-sm">需要您审批的待办事项</p>
+                <div class="mt-2 text-right">
+                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">5个待办</span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <div class="flex items-center text-green-500 mb-3">
+                    <i class="fas fa-check-circle text-xl mr-3"></i>
+                    <h3 class="font-bold">已办事项</h3>
+                </div>
+                <p class="text-gray-600 text-sm">您已处理的审批历史记录</p>
+                <div class="mt-2 text-right">
+                    <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">42个历史</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 待我审批列表 -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-gray-800">待我审批</h2>
+                <div class="flex">
+                    <div class="relative mr-4">
+                        <input type="text" placeholder="搜索审批..." class="border rounded-lg py-2 px-3 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <i class="fas fa-search absolute right-3 top-2.5 text-gray-400"></i>
+                    </div>
+                    <div class="flex">
+                        <button class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm">
+                            <i class="fas fa-filter mr-1"></i>筛选
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 审批标签页 -->
+            <div class="border-b mb-4">
+                <ul class="flex -mb-px">
+                    <li class="mr-1">
+                        <a href="#" class="inline-block py-2 px-4 text-red-500 font-medium border-b-2 border-red-500">全部</a>
+                    </li>
+                    <li class="mr-1">
+                        <a href="#" class="inline-block py-2 px-4 text-gray-500 hover:text-gray-700">报销申请</a>
+                    </li>
+                    <li class="mr-1">
+                        <a href="#" class="inline-block py-2 px-4 text-gray-500 hover:text-gray-700">休假申请</a>
+                    </li>
+                    <li class="mr-1">
+                        <a href="#" class="inline-block py-2 px-4 text-gray-500 hover:text-gray-700">采购申请</a>
+                    </li>
+                    <li>
+                        <a href="#" class="inline-block py-2 px-4 text-gray-500 hover:text-gray-700">其他</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 审批列表 -->
+            <div class="space-y-4">
+                <!-- 紧急审批项 -->
+                <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start">
+                        <div class="flex">
+                            <div class="mr-4">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="申请人头像" class="w-12 h-12 rounded-full">
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">张经理的报销申请</h3>
+                                <p class="text-sm text-gray-600 mt-1">商务招待费用报销 ¥2,850.00</p>
+                                <div class="flex text-xs text-gray-500 mt-2">
+                                    <span class="mr-3"><i class="far fa-clock mr-1"></i> 2023-11-18 提交</span>
+                                    <span class="mr-3"><i class="fas fa-tag mr-1"></i> 报销申请</span>
+                                    <span><i class="fas fa-file-invoice-dollar mr-1"></i> NO.F2023111801</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mb-2">紧急</span>
+                            <div class="flex space-x-2">
+                                <button class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">审批</button>
+                                <button class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded">详情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 常规审批项 -->
+                <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start">
+                        <div class="flex">
+                            <div class="mr-4">
+                                <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="申请人头像" class="w-12 h-12 rounded-full">
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">李助理的休假申请</h3>
+                                <p class="text-sm text-gray-600 mt-1">年假 3天 (2023-11-25 至 2023-11-27)</p>
+                                <div class="flex text-xs text-gray-500 mt-2">
+                                    <span class="mr-3"><i class="far fa-clock mr-1"></i> 2023-11-17 提交</span>
+                                    <span class="mr-3"><i class="fas fa-tag mr-1"></i> 休假申请</span>
+                                    <span><i class="fas fa-file-alt mr-1"></i> NO.L2023111702</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mb-2">常规</span>
+                            <div class="flex space-x-2">
+                                <button class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">审批</button>
+                                <button class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded">详情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 材料缺失审批项 -->
+                <div class="border border-yellow-300 rounded-lg p-4 hover:shadow-md transition-shadow bg-yellow-50">
+                    <div class="flex justify-between items-start">
+                        <div class="flex">
+                            <div class="mr-4">
+                                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="申请人头像" class="w-12 h-12 rounded-full">
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">王工程师的采购申请</h3>
+                                <p class="text-sm text-gray-600 mt-1">开发设备采购 ¥12,500.00</p>
+                                <div class="flex text-xs text-gray-500 mt-2">
+                                    <span class="mr-3"><i class="far fa-clock mr-1"></i> 2023-11-16 提交</span>
+                                    <span class="mr-3"><i class="fas fa-tag mr-1"></i> 采购申请</span>
+                                    <span><i class="fas fa-shopping-cart mr-1"></i> NO.P2023111603</span>
+                                </div>
+                                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-2 text-xs mt-2">
+                                    <i class="fas fa-exclamation-triangle mr-1"></i> 材料缺失：采购设备详细配置说明及供应商对比
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full mb-2">材料缺失</span>
+                            <div class="flex space-x-2">
+                                <button class="text-sm bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">退回补充</button>
+                                <button class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded">详情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 审批详情 -->
+        <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-gray-800">审批详情</h2>
+                <div class="flex space-x-2">
+                    <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                        <i class="fas fa-check mr-1"></i>同意
+                    </button>
+                    <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                        <i class="fas fa-times mr-1"></i>拒绝
+                    </button>
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                        <i class="fas fa-share mr-1"></i>转交
+                    </button>
+                </div>
+            </div>
+
+            <!-- 申请基本信息 -->
+            <div class="mb-6">
+                <div class="flex items-center mb-3">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="申请人头像" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <h3 class="font-bold text-gray-800">张经理的报销申请</h3>
+                        <p class="text-sm text-gray-600">NO.F2023111801 | 2023-11-18 09:32 提交</p>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">申请人</p>
+                            <p class="font-medium">张经理 (市场部)</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">报销类型</p>
+                            <p class="font-medium">商务招待费</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">报销金额</p>
+                            <p class="font-medium text-red-600">¥2,850.00</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">发生日期</p>
+                            <p class="font-medium">2023-11-15</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="text-sm text-gray-500">报销事由</p>
+                            <p class="font-medium">与ABC公司客户进行项目洽谈，商务招待费用。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 发票材料 -->
+            <div class="mb-6">
+                <h3 class="font-bold text-gray-800 mb-3">发票与证明材料</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="border rounded-lg overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1572376313139-8d6c42d6199e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="发票" class="w-full h-32 object-cover">
+                        <div class="p-2">
+                            <p class="text-sm font-medium">餐饮费发票</p>
+                            <p class="text-xs text-gray-500">¥1,850.00</p>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1567113463385-102a7bcf4fb2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="发票" class="w-full h-32 object-cover">
+                        <div class="p-2">
+                            <p class="text-sm font-medium">住宿费发票</p>
+                            <p class="text-xs text-gray-500">¥1,000.00</p>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="合影" class="w-full h-32 object-cover">
+                        <div class="p-2">
+                            <p class="text-sm font-medium">洽谈合影</p>
+                            <p class="text-xs text-gray-500">2023-11-15</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 审批流程 -->
+            <div>
+                <h3 class="font-bold text-gray-800 mb-3">审批流程</h3>
+                <div class="flex items-center mb-1">
+                    <div class="approval-step completed">
+                        <div class="flex items-center">
+                            <div class="step-number w-8 h-8 rounded-full border-2 flex items-center justify-center mr-2">1</div>
+                            <div class="text-sm font-medium">部门经理审批</div>
+                        </div>
+                    </div>
+                    <div class="flex-grow border-t border-gray-300 mx-2"></div>
+                    <div class="approval-step current">
+                        <div class="flex items-center">
+                            <div class="step-number w-8 h-8 rounded-full border-2 flex items-center justify-center mr-2">2</div>
+                            <div class="text-sm font-medium">财务总监审批</div>
+                        </div>
+                    </div>
+                    <div class="flex-grow border-t border-gray-300 mx-2"></div>
+                    <div class="approval-step pending">
+                        <div class="flex items-center">
+                            <div class="step-number w-8 h-8 rounded-full border-2 flex items-center justify-center mr-2">3</div>
+                            <div class="text-sm font-medium">财务付款</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ml-4 pl-4 border-l border-gray-300 mt-2">
+                    <div class="mb-4">
+                        <div class="flex justify-between">
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="审批人头像" class="w-6 h-6 rounded-full mr-2">
+                                <span class="text-sm font-medium">刘经理（市场部）</span>
+                            </div>
+                            <span class="text-xs text-green-600">已审批</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-1">属实，同意报销。</p>
+                        <p class="text-xs text-gray-500 mt-1">2023-11-18 10:05</p>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex justify-between">
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="审批人头像" class="w-6 h-6 rounded-full mr-2">
+                                <span class="text-sm font-medium">王总监（财务部）</span>
+                            </div>
+                            <span class="text-xs text-red-600">待审批</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 审批意见 -->
+            <div class="mt-6">
+                <h3 class="font-bold text-gray-800 mb-3">审批意见</h3>
+                <div class="relative">
+                    <textarea placeholder="请输入您的审批意见..." class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 h-20"></textarea>
+                    <div class="absolute right-2 bottom-2">
+                        <button class="text-gray-400 hover:text-gray-600 mr-2">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 智能意见推荐 -->
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
+                    <p class="text-sm text-blue-700 mb-2"><i class="fas fa-robot mr-1"></i> 智能意见推荐：</p>
+                    <div class="space-y-2">
+                        <button class="text-xs bg-white border border-blue-300 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-100">
+                            同意，符合公司报销制度
+                        </button>
+                        <button class="text-xs bg-white border border-blue-300 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-100">
+                            已核实，发票真实有效，同意报销
+                        </button>
+                        <button class="text-xs bg-white border border-blue-300 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-100">
+                            请补充客户名片和会议纪要
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部状态栏 -->
+    <footer class="bg-white border-t py-3">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-500">
+            全流程智能审批助手 © 2023 | 已接入讯飞文字识别与星火大模型技术
+        </div>
+    </footer>
+
+    <!-- 语音催办弹窗 -->
+    <div class="fixed bottom-10 right-10 bg-white shadow-lg rounded-lg p-4 flex items-center animate-pulse">
+        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
+            <i class="fas fa-volume-up text-red-500"></i>
+        </div>
+        <div>
+            <p class="font-medium">语音提醒</p>
+            <p class="text-sm text-gray-600">张经理的报销申请等待您审批</p>
+        </div>
+        <button class="ml-4 text-gray-400 hover:text-gray-600">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</body>
+</html> 
